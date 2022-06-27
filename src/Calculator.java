@@ -34,8 +34,8 @@ public class Calculator implements ActionListener{
 		divButton = new JButton("/");
 		decButton = new JButton(".");
 		equButton = new JButton("=");
-		delButton = new JButton("del");
-		clrButton = new JButton("C");
+		delButton = new JButton("Delete");
+		clrButton = new JButton("Clear");
 		
 		functionButtons[0] = addButton;							// add buttons to array
 		functionButtons[1] = subButton;
@@ -59,9 +59,32 @@ public class Calculator implements ActionListener{
 			numberButtons[i].setFocusable(false);
 		}
 		
-		delButton.setBounds(50, 430, 145, 50);
-		clrButton.setBounds(205,430,145, 50);
+		delButton.setBounds(50, 430, 145, 50);					//set location for delete button
+		clrButton.setBounds(205,430,145, 50);					//set location for clear button
 		
+		panel = new JPanel();									//instantiate panel
+		panel.setBounds(50, 100,300, 300);						//set location 
+		panel.setLayout(new GridLayout(4, 4, 10, 10));			//w, h, top space, right space
+//		panel.setBackground(Color.GRAY);						//back ground color of panel
+
+		panel.add(numberButtons[1]);							//add number button
+		panel.add(numberButtons[2]);
+		panel.add(numberButtons[3]);
+		panel.add(addButton);									//operator button						
+		panel.add(numberButtons[4]);
+		panel.add(numberButtons[5]);
+		panel.add(numberButtons[6]);
+		panel.add(subButton);
+		panel.add(numberButtons[7]);
+		panel.add(numberButtons[8]);
+		panel.add(numberButtons[9]);
+		panel.add(mulButton);
+		panel.add(decButton);
+		panel.add(numberButtons[0]);
+		panel.add(equButton);
+		panel.add(divButton);
+		
+		frame.add(panel);
 		frame.add(delButton);
 		frame.add(clrButton);
 		frame.add(textfield);									//add text field to frame				
@@ -76,9 +99,67 @@ public class Calculator implements ActionListener{
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+	public void actionPerformed(ActionEvent e) {				//iterate through numberButtons
+		for(int i = 0; i < numberButtons.length; i++) {
+			if(e.getSource() == numberButtons[i]) {					//if event is a number button
+				textfield.setText(textfield.getText().concat(String.valueOf(i)));		//set text field to the string value of each button concatenated together.
+				
+			}
+		}
+		if(e.getSource() == decButton) {							//if event is decimal
+			textfield.setText(textfield.getText().concat("."));		//add decimal to strings
+		}
+		if(e.getSource() == addButton) {							//if event is add button
+			num1 = Double.parseDouble(textfield.getText());			//parse contents of text feild to a number then assign it to num1
+			operator = '+';											//assign '+' sign to operater
+			textfield.setText("");									//set text field to empty
+		}
+		if(e.getSource() == subButton) {
+			num1 = Double.parseDouble(textfield.getText());
+			operator = '-';
+			textfield.setText("");
+		}
+		if(e.getSource() == mulButton) {
+			num1 = Double.parseDouble(textfield.getText());
+			operator = '*';
+			textfield.setText("");
+		}
+		if(e.getSource() == divButton) {
+			num1 = Double.parseDouble(textfield.getText());
+			operator = '/';
+			textfield.setText("");
+		}
+		if(e.getSource() == equButton){									//if even is '=' parse text field to a number and assign it to num2
+			num2 = Double.parseDouble(textfield.getText());
+			
+			switch(operator){
+			case '+':
+				result = num1 + num2;
+				break;
+			case '-':
+				result = num1 - num2;
+				break;
+			case '*':
+				result = num1 * num2;
+				break;
+			case '/':
+				result = num1 / num2;
+				break;
+			}
+			textfield.setText(String.valueOf(result));
+			num1 = result;												//assign result to num1 so continue doing calculations				
+		}
+		if(e.getSource() == clrButton) {								// if even is clear set text field to an empty 
+			textfield.setText("");
+		}
+		if(e.getSource() == delButton) {
+			String string = textfield.getText();
+			textfield.setText("");
+			
+			for(int i = 0; i < string.length() - 1; i++){
+				textfield.setText(textfield.getText() + string.charAt(i));
+			}
+		}
 	}
 
 }
